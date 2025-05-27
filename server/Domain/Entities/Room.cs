@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
     public class Room
     {
-
+        
         [Key]
         public int RoomId { get; set; }
 
@@ -28,7 +28,6 @@ namespace Domain.Entities
 
         public ICollection<Showtime> Showtimes { get; set; }
         public ICollection<Seat> Seats { get; set; }
-
 
     }
 }

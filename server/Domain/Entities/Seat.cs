@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
     public class Seat
     {
-        [Key]
+          [Key]
         public int SeatId { get; set; }
 
         [Required, StringLength(10)]
@@ -18,8 +18,6 @@ namespace Domain.Entities
         [ForeignKey("Room")]
         public int RoomId { get; set; }
         public Room Room { get; set; }
-
-
 
     }
 }

@@ -17,7 +17,7 @@ namespace Domain.Entities
         public string Description { get; set; }
 
         [Required, Range(0, 250)]
-        public int Duration { get; set; } 
+        public int Duration { get; set; }
 
         [Required, StringLength(200)]
         public string Director { get; set; }
@@ -33,7 +33,7 @@ namespace Domain.Entities
         public string TrailerUrl { get; set; }
 
         [StringLength(5)]
-        public string Rating { get; set; } 
+        public string Rating { get; set; }
 
         [Required]
         public DateTime ReleaseDate { get; set; }
@@ -43,7 +43,5 @@ namespace Domain.Entities
         public DateTime UpdatedAt { get; set; }
 
         public ICollection<Showtime> Showtimes { get; set; }
-
-
     }
 }

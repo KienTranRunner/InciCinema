@@ -1,54 +1,134 @@
+"use client";
+
 import Link from "next/link";
 import { Input } from "../ui/input";
 import { ModeToggle } from "../ui/mode-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Search } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
+  LayoutDashboard,
+  LogIn,
+  Search,
+  User,
+  UserPlus,
+} from "lucide-react";
+import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b backdrop-blur-md bg-white/70 dark:bg-zinc-900/60 shadow-sm transition-colors">
-      <div className="h-1 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 " />
+      <div className="h-1 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500" />
 
       <div className="flex items-center justify-between px-6 h-20 border-b">
-        <div className="flex items-center gap-6">
-          <Link
-            href="/"
-            className="text-3xl font-extrabold bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent"
-          >
-            InciCinema
-          </Link>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="relative w-[420px]">
-            <Input
-              type="text"
-              placeholder="Tìm kiếm phim..."
-              className=" max-w-sm pl-10 pr-4 py-2 rounded-full border-2 border-gray-300 focus:border-purple-500 transition duration-300"
-            />
-            <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-          </div>
+        <Link
+          href="/"
+          className="text-3xl font-extrabold bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent"
+        >
+          InciCinema
+        </Link>
+
+        <div className="relative w-[420px] hidden md:block">
+          <Input
+            type="text"
+            placeholder="Tìm kiếm phim..."
+            className="pl-10 pr-4 py-2 rounded-full border-2 border-gray-300 focus:border-purple-500 transition duration-300"
+          />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={20}
+          />
         </div>
 
         <div className="flex items-center gap-4">
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar className="w-9 h-9 p-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full cursor-pointer">
-                <div className="bg-background rounded-full w-full h-full flex items-center justify-center overflow-hidden">
-                  <AvatarImage src="/avatar.jpg" alt="Avatar" />
-                  <AvatarFallback>IC</AvatarFallback>
-                </div>
-              </Avatar>
+              <button className="p-2 rounded-full border hover:bg-gray-100 transition">
+                {user?.image ? (
+                  <Image
+                    src={user.image}
+                    alt="avatar"
+                    width={30}
+                    height={30}
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <User className="w-5 h-5 text-gray-700" />
+                )}
+              </button>
             </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="end"
+              className="w-48 rounded-xl shadow-xl p-2 border bg-white dark:bg-zinc-800"
+            >
+              {user ? (
+                <>
+                  <div className="px-3 py-2 text-sm text-gray-600 dark:text-gray-200">
+                    Xin chào, {user.name}
+                  </div>
+                  <div className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400">
+                    Vai trò: {user.role}
+                  </div>
+
+                  {user.role === "Admin" || user.role === "Staff" || user.role === "Manager" && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700 w-full"
+                      >
+                        <LayoutDashboard className="w-4 h-4 text-gray-600" />
+                        <span className="text-sm">Dashboard</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+
+                  <DropdownMenuItem asChild>
+                    <button
+                      onClick={() =>
+                        signOut({ callbackUrl: "/" })
+                      }
+                      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700 w-full text-left"
+                    >
+                      <LogIn className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm">Đăng xuất</span>
+                    </button>
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/auth/login"
+                      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700"
+                    >
+                      <LogIn className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm">Đăng nhập</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/auth/register"
+                      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700"
+                    >
+                      <UserPlus className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm">Đăng ký</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
-
-     
 
       <nav className="flex justify-center items-center gap-6 px-6 py-3 uppercase font-medium">
         {[
@@ -70,7 +150,6 @@ export default function Header() {
           </Link>
         ))}
       </nav>
-
     </header>
   );
 }

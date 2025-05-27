@@ -20,7 +20,7 @@ export default function Footer() {
               </li>
               <li>Giờ làm việc: 8h00–22h00 (Tất cả các ngày)</li>
               <li>
-                Email: <a href="mailto:tmkien328@gmail.com" className="text-blue-600 hover:underline">tmkien328@touchcinema.com</a>
+                Email: <a href="mailto:tmkien328@gmail.com" className="text-blue-600 hover:underline">tmkien328@gmail.com</a>
               </li>
             </ul>
           </div>

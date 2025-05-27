@@ -1,11 +1,13 @@
+
 import type { Metadata } from "next";
-import {Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-
+import SessionWrapper from "@/components/session-wrapper"; 
+import { Toaster } from "sonner";
 
 const roboto = Roboto({
-  weight: ["400", "500", "700"], 
+  weight: ["400", "500", "700"],
   subsets: ["latin", "vietnamese"],
   variable: "--font-roboto",
 });
@@ -22,17 +24,18 @@ export default function RootLayout({
 }>) {
   return (
     <html className="dark" lang="en" suppressHydrationWarning>
-      <body
-        className={`${roboto.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <body className={`${roboto.variable} antialiased`}>
+        <SessionWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </SessionWrapper>
+        <Toaster />
       </body>
     </html>
   );
