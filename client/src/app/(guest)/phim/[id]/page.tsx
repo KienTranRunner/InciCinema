@@ -1,4 +1,3 @@
-import { use } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,24 +5,27 @@ import { Movie } from "@/types/movie";
 import { TrailerModal } from "@/components/(landing)/(phim)/trailer-modal";
 import { ShowtimeList } from "@/components/(landing)/(phim)/showtime-list";
 
+export type ParamsType = Promise<{ id: string }>;
+
 interface PageProps {
-  params: { id: string };
+  params: ParamsType;
 }
 
-function getMovie(id: string): Promise<Movie> {
-  return fetch(`${process.env.NEXT_PUBLIC_BACK_END_URL}/api/movie/${id}`, {
-    cache: "no-store",
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error("Có lỗi xảy ra khi lấy thông tin phim");
+export default async function MovieDetailPage({ params }: PageProps) {
+  const { id } = await params;
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACK_END_URL}/api/movie/${id}`,
+    {
+      cache: "no-store",
     }
-    return res.json();
-  });
-}
+  );
 
-export default function MovieDetailPage(props: PageProps) {
-  const { id } = props.params;
-  const movie = use(getMovie(id));
+  if (!res.ok) {
+    throw new Error("Có lỗi xảy ra khi lấy thông tin phim");
+  }
+
+  const movie: Movie = await res.json();
 
   return (
     <div className="container mx-auto px-4 py-8">
