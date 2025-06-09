@@ -1,0 +1,12 @@
+/Users/kien283/ASP.NET/InciCinema/server/Domain/bin/Release/net9.0/Domain.deps.json
+/Users/kien283/ASP.NET/InciCinema/server/Domain/bin/Release/net9.0/Domain.dll
+/Users/kien283/ASP.NET/InciCinema/server/Domain/bin/Release/net9.0/Domain.pdb
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.AssemblyInfoInputs.cache
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.AssemblyInfo.cs
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.csproj.CoreCompileInputs.cache
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.sourcelink.json
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.dll
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/refint/Domain.dll
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/Domain.pdb
+/Users/kien283/ASP.NET/InciCinema/server/Domain/obj/Release/net9.0/ref/Domain.dll

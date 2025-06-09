@@ -13,6 +13,8 @@ using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:10000");
+
 
 builder.Services.AddCors(options =>
 {
@@ -56,6 +58,8 @@ builder.Services.AddAuthentication(options =>
       };
   });
 
+
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
@@ -70,10 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(); 
 }
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5000); 
-});
+
 
 
 app.UseHttpsRedirection();
