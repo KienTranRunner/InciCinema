@@ -5,9 +5,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Application.DTOs.Auth.GoogleLogin;
 using Application.DTOs.Auth.Login;
 using Application.DTOs.Auth.Register;
 using Application.Interfaces;
+using Google.Apis.Auth;
 using Infrastructure.Indentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -18,10 +20,10 @@ namespace Application.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly RoleManager<IdentityRole<string>> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<string>> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -45,7 +47,6 @@ namespace Application.Services
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]);
-                // Tạo danh sách Claims
                 var roles = await _userManager.GetRolesAsync(user);
                 var claims = new List<Claim>
                 {
@@ -90,6 +91,7 @@ namespace Application.Services
             {
                 var user = new ApplicationUser
                 {
+                    Id = Guid.NewGuid().ToString(),
                     UserName = request.Username,
                     Email = request.Email,
                     FullName = request.FullName
@@ -101,7 +103,7 @@ namespace Application.Services
                 {
                     if (!await _roleManager.RoleExistsAsync("Guest"))
                     {
-                        var createRoleResult = await _roleManager.CreateAsync(new IdentityRole<int>("Guest"));
+                        var createRoleResult = await _roleManager.CreateAsync(new IdentityRole<string>("Guest"));
                         if (!createRoleResult.Succeeded)
                         {
                             return new RegisterResponse
@@ -140,5 +142,111 @@ namespace Application.Services
             }
 
         }
+
+        public async Task<LoginResponse> GoogleLoginAsync(GoogleLoginRequest request)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken);
+                if (payload == null)
+                {
+                    return new LoginResponse
+                    {
+                        Succeeded = false,
+                        Errors = new List<string> { "Google token không hợp lệ." }
+                    };
+                }
+
+                var email = payload.Email;
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user == null)
+                {
+                    user = new ApplicationUser
+                    {
+                        Id = Guid.NewGuid().ToString(), 
+                        UserName = email,
+                        Email = email,
+                        FullName = payload.Name
+                    };
+
+                    var createResult = await _userManager.CreateAsync(user);
+                    if (!createResult.Succeeded)
+                    {
+                        return new LoginResponse
+                        {
+                            Succeeded = false,
+                            Errors = createResult.Errors.Select(e => e.Description).ToList()
+                        };
+                    }
+
+                    if (!await _roleManager.RoleExistsAsync("Guest"))
+                    {
+                        var roleCreateResult = await _roleManager.CreateAsync(new IdentityRole<string>("Guest"));
+                        if (!roleCreateResult.Succeeded)
+                        {
+                            return new LoginResponse
+                            {
+                                Succeeded = false,
+                                Errors = roleCreateResult.Errors.Select(e => e.Description).ToList()
+                            };
+                        }
+                    }
+
+                    var roleAddResult = await _userManager.AddToRoleAsync(user, "Guest");
+                    if (!roleAddResult.Succeeded)
+                    {
+                        return new LoginResponse
+                        {
+                            Succeeded = false,
+                            Errors = roleAddResult.Errors.Select(e => e.Description).ToList()
+                        };
+                    }
+                }
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]);
+                var roles = await _userManager.GetRolesAsync(user);
+
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.UserName)
+        };
+
+                claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role))); 
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    Issuer = _configuration["JWT:ValidIssuer"],
+                    Audience = _configuration["JWT:ValidAudience"],
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
+
+                return new LoginResponse
+                {
+                    Succeeded = true,
+                    Token = tokenString
+                };
+            }
+            catch (Exception ex)
+            {
+                return new LoginResponse
+                {
+                    Succeeded = false,
+                    Errors = new List<string> { $"Đã xảy ra lỗi: {ex.Message}" }
+                };
+            }
+        }
+
+
+
+
     }
 }

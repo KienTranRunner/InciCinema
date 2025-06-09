@@ -14,14 +14,24 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins(builder.Configuration["Front_End_URL:ValidURL"]) 
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<string>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -53,12 +63,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(); 
 }
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); 
+});
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

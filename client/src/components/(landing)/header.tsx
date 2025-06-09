@@ -9,19 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  LayoutDashboard,
-  LogIn,
-  Search,
-  User,
-  UserPlus,
-} from "lucide-react";
+import { LayoutDashboard, LogIn, Search, User, UserPlus, History } from "lucide-react";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
   const { data: session } = useSession();
   const user = session?.user;
+
+  console.log(user?.id);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b backdrop-blur-md bg-white/70 dark:bg-zinc-900/60 shadow-sm transition-colors">
@@ -79,7 +75,9 @@ export default function Header() {
                     Vai trò: {user.role}
                   </div>
 
-                  {user.role === "Admin" || user.role === "Staff" || user.role === "Manager" && (
+                  {(user.role === "Admin" ||
+                    user.role === "Staff" ||
+                    user.role === "Manager") && (
                     <DropdownMenuItem asChild>
                       <Link
                         href="/dashboard"
@@ -92,10 +90,17 @@ export default function Header() {
                   )}
 
                   <DropdownMenuItem asChild>
+                    <Link
+                      href = "/lich-su-mua-ve"
+                      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700 w-full text-left"               >
+                      <History className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm">Lịch sử mua vé</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
                     <button
-                      onClick={() =>
-                        signOut({ callbackUrl: "/" })
-                      }
+                      onClick={() => signOut({ callbackUrl: "/" })}
                       className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-700 w-full text-left"
                     >
                       <LogIn className="w-4 h-4 text-gray-600" />
@@ -130,7 +135,7 @@ export default function Header() {
         </div>
       </div>
 
-      <nav className="flex justify-center items-center gap-6 px-6 py-3 uppercase font-medium">
+      <nav className="flex justify-center items-center gap-6 px-6 py-3 uppercase font-medium ">
         {[
           { href: "/", label: "Trang chủ" },
           { href: "/phim", label: "Phim" },
@@ -138,17 +143,16 @@ export default function Header() {
           { href: "/gia-ve", label: "Giá vé" },
           { href: "/thanh-vien", label: "Thành viên" },
           { href: "/gioi-thieu", label: "Giới thiệu" },
-          { href: "/dich-vu", label: "Dịch vụ" },
         ].map((link) => (
           <Link
             key={link.href}
             href={link.href}
             className="group relative text-base md:text-lg text-foreground px-2 py-1 font-semibold transition-all duration-300 hover:text-pink-500 dark:hover:text-yellow-400"
           >
-            <span className="relative z-10">{link.label}</span>
+            <span className="relative z-10 ">{link.label}</span>
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-gradient-to-r from-pink-500 to-yellow-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
           </Link>
-        ))}
+        ))} 
       </nav>
     </header>
   );

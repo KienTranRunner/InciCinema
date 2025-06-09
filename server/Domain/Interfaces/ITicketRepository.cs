@@ -8,6 +8,8 @@ namespace Domain.Interfaces
 {
     public interface ITicketRepository : IRepository<Ticket>
     {
-        
+        Task AddRangeAsync(IEnumerable<Ticket> tickets);
+        Task<IEnumerable<Ticket>> GetTicketsByUserIdAsync(string userId);
+
     }
 }

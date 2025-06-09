@@ -8,6 +8,12 @@ namespace Domain.Interfaces
 {
     public interface ISeatRepository : IRepository<Seat>
     {
-        
+        Task AddRangeAsync(IEnumerable<Seat> seats);
+        Task<List<Seat>> GetByRoomIdAsync(int roomId);
+
+        Task<List<Seat>> GetByRoomIdAndSeatNumbersAsync(int roomId, List<string> seatNumbers);
+        void RemoveRange(IEnumerable<Seat> seats);
+
+
     }
 }

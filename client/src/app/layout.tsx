@@ -25,7 +25,9 @@ export default function RootLayout({
   return (
     <html className="dark" lang="en" suppressHydrationWarning>
       <body className={`${roboto.variable} antialiased`}>
+
         <SessionWrapper>
+
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -34,6 +36,8 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
+
+
         </SessionWrapper>
         <Toaster />
       </body>

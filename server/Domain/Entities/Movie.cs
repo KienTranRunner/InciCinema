@@ -35,6 +35,8 @@ namespace Domain.Entities
         [StringLength(5)]
         public string Rating { get; set; }
 
+        public bool hasStoppedShowing { get; set; }
+        
         [Required]
         public DateTime ReleaseDate { get; set; }
 

@@ -91,9 +91,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Section */}
         <div className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>&copy; {new Date().getFullYear()} TouchCinema. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} InciCinema. All rights reserved.</p>
         </div>
       </div>
     </footer>

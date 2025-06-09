@@ -24,7 +24,7 @@ namespace Domain.Entities
         [ForeignKey("Movie")]
         public int MovieId { get; set; }
         public Movie Movie { get; set; }
-
+    
         [ForeignKey("Room")]
         public int RoomId { get; set; }
         public Room Room { get; set; }

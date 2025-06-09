@@ -17,21 +17,20 @@ namespace Domain.Entities
 
         public DateTime BookingTime { get; set; }
 
-
         [Required, MaxLength(20)]
         public string Status { get; set; }
 
-
         [ForeignKey("Showtime")]
         public int ShowTimeId { get; set; }
+
         public Showtime Showtime { get; set; }
 
-        [ForeignKey("Seat")]
         public int SeatId { get; set; }
+
         public Seat Seat { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
+
 
     }
 }

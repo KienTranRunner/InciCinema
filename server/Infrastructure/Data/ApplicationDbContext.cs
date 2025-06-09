@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<string>, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -24,9 +24,9 @@ namespace Infrastructure.Data
         public DbSet<Showtime> Showtimes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
 
-         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); 
+            base.OnModelCreating(modelBuilder);
 
             // Movie
             modelBuilder.Entity<Movie>()
@@ -83,6 +83,7 @@ namespace Infrastructure.Data
                 .Property(st => st.Price)
                 .IsRequired();
 
+            // Ticket
             modelBuilder.Entity<Ticket>()
                 .Property(t => t.Price)
                 .HasColumnType("decimal(10,2)");
@@ -103,6 +104,23 @@ namespace Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(t => t.ShowTimeId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+                modelBuilder.Entity<Ticket>()
+    .HasOne(t => t.Showtime)
+    .WithMany(st => st.Tickets) 
+    .HasForeignKey(t => t.ShowTimeId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+
+
+            modelBuilder.Entity<Ticket>()
+                .HasOne<ApplicationUser>()
+                .WithMany(u => u.Tickets)
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
         }
     }
 }
