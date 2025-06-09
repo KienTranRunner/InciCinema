@@ -1,3 +1,4 @@
+import { use } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,21 +10,20 @@ interface PageProps {
   params: { id: string };
 }
 
-export default async function MovieDetailPage(props: PageProps) {
-  const { id } = await props.params;
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACK_END_URL}/api/movie/${id}`,
-    {
-      cache: "no-store",
+function getMovie(id: string): Promise<Movie> {
+  return fetch(`${process.env.NEXT_PUBLIC_BACK_END_URL}/api/movie/${id}`, {
+    cache: "no-store",
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Có lỗi xảy ra khi lấy thông tin phim");
     }
-  );
+    return res.json();
+  });
+}
 
-  if (!res.ok) {
-    throw new Error("Có lỗi xảy ra khi lấy thông tin phim");
-  }
-
-  const movie: Movie = await res.json();
+export default function MovieDetailPage(props: PageProps) {
+  const { id } = props.params;
+  const movie = use(getMovie(id));
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -78,18 +78,14 @@ export default async function MovieDetailPage(props: PageProps) {
 
             {movie.trailerUrl && (
               <div className="mt-6">
-                    <TrailerModal trailerUrl={movie.trailerUrl} />
-
+                <TrailerModal trailerUrl={movie.trailerUrl} />
               </div>
             )}
           </div>
         </CardContent>
-
-
       </Card>
 
       <ShowtimeList movieId={id} />
-
     </div>
   );
 }
