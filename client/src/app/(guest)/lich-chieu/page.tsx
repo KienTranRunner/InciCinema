@@ -35,7 +35,7 @@ export default function ShowTimePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:5075/api/showtime");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACK_END_URL}/api/showtime`);
         const json = await res.json();
         setData(json);
       } catch (err) {

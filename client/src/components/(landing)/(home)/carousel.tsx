@@ -47,7 +47,6 @@ export default function HomeCarousel() {
         ))}
       </CarouselContent>
 
-      {/* Arrows */}
       <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10" />
       <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10" />
     </Carousel>
