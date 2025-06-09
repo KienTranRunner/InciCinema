@@ -153,3 +153,15 @@
 /Users/kien283/ASP.NET/InciCinema/server/API/obj/Debug/net9.0/API.pdb
 /Users/kien283/ASP.NET/InciCinema/server/API/obj/Debug/net9.0/API.genruntimeconfig.cache
 /Users/kien283/ASP.NET/InciCinema/server/API/obj/Debug/net9.0/ref/API.dll
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/out/web.config
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/web.config
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/API.deps.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/API.runtimeconfig.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/API.staticwebassets.endpoints.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/appsettings.Development.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/appsettings.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/out/API.deps.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/out/API.runtimeconfig.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/out/API.staticwebassets.endpoints.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/out/appsettings.Development.json
+/Users/kien283/ASP.NET/InciCinema/server/API/bin/Debug/net9.0/out/out/appsettings.json
